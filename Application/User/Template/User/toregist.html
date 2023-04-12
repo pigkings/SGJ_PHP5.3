@@ -1,0 +1,51 @@
+﻿<extend name="$_user_layout"/>
+<block name="main">
+    <section>
+        <div class="span12">
+            <form class="login-form" action="{:U('User/User/register')}" method="post">
+                <h3 class="loginf_h3tt">注册</h3>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputUsername">用户名</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputUsername" class="span3 " placeholder="请输入用户名"   name="username">
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputPassword">密码</label>
+                    <div class="controls pull-left">
+                        <input type="password" id="inputPassword" class="span3 " placeholder="请输入密码" errormsg="密码为6-20位" nullmsg="请填写密码" datatype="*6-20" name="password">
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputcode">邀请码</label>
+                    <div class="controls pull-left">
+                        <empty name="code">
+                            <input type="text" id="inputcode" class="span3 " placeholder="没有可以为空"   name="invite_code">
+                            <else />
+                            <input type="text" readonly="readonly" id="inputcode" class="span3 " placeholder="请输入邀请码"   name="invite_code" value="{$code}">
+                        </empty>
+
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputVerify">验证码</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputVerify" class="span3" placeholder="请输入验证码" errormsg="请填写5位验证码" nullmsg="请填写验证码" datatype="*5-5" name="verify">
+                    </div>
+                </div>
+                <div class="control-group1">
+                    <div class="controls">
+                        <img class="verifyimg reload-verify" alt="验证码" src="{:U('User/User/verify')}" title="点击刷新">
+                    </div>
+                    <div class="controls Validform_checktip text-warning"></div>
+                </div>
+                <div class="control-group1">
+                    <div class="controls">
+                        <input type="hidden" name="reg_type" value="username">
+                        <button type="submit" class="btn btnsubmit">注 册</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</block>

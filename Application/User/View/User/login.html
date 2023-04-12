@@ -1,0 +1,83 @@
+
+
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/libs/bootstrap_validator/css/bootstrapValidator.min.css">
+</block>
+
+<block name="jumbotron">
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 hidden-xs">
+                    <!--<img class="img-responsive" src="__HOME_IMG__/index/login-left.png">-->
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="panel">
+                        <h3 class="text-center">{$meta_title}</h3>
+                        <div class="panel-body">
+                            <form class="form login-form" action="{:U('User/User/login')}" method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control input-lg" placeholder="邮箱/手机号/用户名" name="username">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control input-lg" placeholder="请输入密码" name="password">
+                                </div>
+                                <div class="form-group clearfix">
+                                    <label class="checkbox-inline" for="remember-login">
+                                        <input id="remember-login" type="checkbox" name="remember_login" checked="checked">
+                                        <span>保持登录</span>
+                                    </label>
+                                    <a class="text-muted pull-right" data-toggle="modal" href="#register-modal">注册帐号</a>
+                                    <a class="text-muted pull-right" href="{:U('User/User/resetPassword')}">忘记密码？</a>
+
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary-outline btn-lg btn-block submit ajax-post" target-form="login-form">登录</button>
+                                </div>
+                                <div class="form-group">
+                                    {:hook('SyncLogin')} <!-- 第三方登陆钩子 -->
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="main"></block>
+
+<block name="script">
+    <script type="text/javascript" src="__PUBLIC__/libs/bootstrap_validator/js/bootstrapValidator.min.js"></script>
+    <script>
+        $(function(){
+            $('.login-form').bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'fa fa-check',
+                    invalid: 'fa fa-remove',
+                    validating: 'fa fa-refresh'
+                },
+                fields: {
+                    username: {
+                        validators: {
+                            notEmpty: {
+                                message: '请输入用户名'
+                            }
+                        }
+                    },
+                    password: {
+                        validators: {
+                            notEmpty: {
+                                message: '请输入密码'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</block>
+

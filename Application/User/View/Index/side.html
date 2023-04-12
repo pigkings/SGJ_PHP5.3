@@ -1,0 +1,216 @@
+<div class="user-center-nav">
+    <?php
+        // 获取用户信息
+        $user_info = D('User/User')->detail(is_login());
+
+    // 获取所有模块配置的用户导航
+    $mod_con['status'] = 1;
+    $_user_nav_center = array();
+    $_module_list = D('Admin/Module')->where($mod_con)->order('sort asc, id asc')->select();
+    foreach ($_module_list as $key => $val) {
+    if ($val['user_nav']) {
+    $user_nav = json_decode($val['user_nav'], true);
+    foreach ($user_nav['center'] as $k => &$v) {
+    if ($v['badge']) {
+    $v['badge'][0] = D($v['badge'][0]);
+    $v['badge_count'] = call_user_func($v['badge']);
+    unset($v['badge']);
+    }
+    }
+    $_nav_center['top'] = $user_nav['top']['center'];
+    $_nav_center['title'] = $user_nav['title']['center'] ? : $val['title'];
+    $_nav_center['nav'] = $user_nav['center'];
+    $_user_nav_center[$val['name']] = $_nav_center;
+    }
+    }
+
+    // 如果模块顶级导航配置了top字段则移动菜单至top所指的模块下边
+    foreach ($_user_nav_center as $key => &$value) {
+    if ($value['top']) {
+    if ($_user_nav_center[$value['top']]['nav']) {
+    $_user_nav_center[$value['top']]['nav'] = array_merge($_user_nav_center[$value['top']]['nav'], $value['nav']);
+    unset($_user_nav_center[$key]);
+    }
+    }
+    }
+    ?>
+
+    <block name="style">
+        <style type="text/css">
+            .main {
+                margin-bottom: 20px;
+            }
+
+            .panel-profile-img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .panel-profile table.info td {
+                width: 50%;
+                padding: 2px;
+                text-align: left;
+            }
+
+            .panel-profile-img-action {
+                color: #fff;
+                padding: 1px 2px;
+                font-size: 10px;
+                border-radius: 20px;
+                background: rgba(0, 0, 0, .5);
+                display: block;
+                position: absolute;
+                bottom: 5px;
+                left: 20%;
+                right: 20%;
+            }
+
+            .panel-profile-img-box {
+                position: relative;
+            }
+
+            .navside {
+                z-index: 999;
+            }
+
+            .navside .navside-nav.navside-first > li > a {
+                border-top: 0;
+            }
+        </style>
+    </block>
+
+    <div class="panel panel-default panel-profile">
+        <div class="panel-heading"></div>
+        <div class="panel-body text-center">
+            <a class="panel-profile-img-box" href="{:U('User/Center/avatar')}">
+                <img class="panel-profile-img" src="{$user_info.avatar|get_cover='avatar'}">
+                <span class="panel-profile-img-action">修改头像</span>
+            </a>
+            <h5 class="panel-title">
+                {$user_info.nickname}
+                <present name="_user_auth.vip">
+                    <span class="badge badge-danger badge-vip">{$_user_auth.vip.type_info.title}</span>
+                </present>
+            </h5>
+            <p class="summary">{$user_info.summary}</p>
+            <table class="info">
+                <tbody>
+                <tr>
+                    <php>
+                        $userAccount = get_user_account($user_info['id']);
+                    </php>
+                    <td class="border-none">积分：{$userAccount.account|default=0.00} <a href="{:U('User/Recharge/add')}">充值</a>
+                        <a href="{:U('User/Withdraw/add')}">兑换</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 侧边导航 -->
+    <nav class="navside navside-default" role="navigation">
+        <ul class="nav navside-nav navside-first">
+            <volist name="_user_nav_center" id="_center" key="fkey">
+                <li>
+                    <a data-toggle="collapse" href="#navside-{$_center.id}-{$fkey}">
+                        <i class="fa {$lk.icon}"></i>
+                        <span class="nav-label">{$_center.title}</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <notempty name="_center.nav">
+                        <ul class="nav navside-nav navside-second collapse in" id="navside-{$lk.id}-{$fkey}">
+                            <volist name="_center.nav" id="_nav" key="skey">
+                                <li>
+                                    <a href="{:U($_nav['url'])}" class="open-tab"
+                                       tab-name="navside-{$_ns.id}-{$fkey}-{$skey}">
+                                        <i class="fa {$_nav.icon}"></i>
+                                        <span class="nav-label">{$_nav.title}</span>
+                                        <notempty name="_nav.badge_count">
+                                            <span class="badge {$_nav.badge_class}">{$_nav['badge_count']}</span>
+                                        </notempty>
+                                    </a>
+                                </li>
+                            </volist>
+                        </ul>
+                    </notempty>
+                </li>
+            </volist>
+        </ul>
+    </nav>
+    <nav role="navigation" class="navside navside-default">
+        <ul class="nav navside-nav navside-first">
+            <li>
+                <a href="#navside--jingcai" data-toggle="collapse">
+                    <i class="fa "></i>
+                    <span class="nav-label">竞猜管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul id="navside--jingcai" class="nav navside-nav navside-second collapse in">
+                    <li>
+                        <a tab-name="navside--1-1" class="open-tab" href="{:U('User/Account/index')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">积分记录</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a tab-name="navside--1-1" class="open-tab" href="{:U('User/Recharge/index')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">充值记录</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a tab-name="navside--1-2" class="open-tab" href="{:U('User/Withdraw/index')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">兑换记录</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a tab-name="navside--1-2" class="open-tab" href="{:U('User/Bet/index')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">竞猜记录</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a tab-name="navside--1-2" class="open-tab" href="{:U('User/Win/index')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">中奖记录</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <nav role="navigation" class="navside navside-default">
+        <ul class="nav navside-nav navside-first">
+            <li>
+                <a href="#navside--2" data-toggle="collapse">
+                    <i class="fa "></i>
+                    <span class="nav-label">代理管理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul id="navside--2" class="nav navside-nav navside-second collapse in">
+                    <li>
+                        <a tab-name="navside--1-1" class="open-tab" href="{:U('User/Center/invitecode')}">
+                            <i class="fa fa fa-link"></i>
+                            <span class="nav-label">推广链接</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a tab-name="navside--2-3" class="open-tab" href="{:U('User/Center/extendRechargeList')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">推广充值记录</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a tab-name="navside--2-2" class="open-tab" href="{:U('User/Center/invitelist')}">
+                            <i class="fa fa fa-bars"></i>
+                            <span class="nav-label">邀请记录</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

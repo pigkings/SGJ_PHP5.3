@@ -1,0 +1,85 @@
+<extend name="$_home_public_layout"/>
+<block name="title"><title>{:C('WEB_SITE_TITLE')}－{:C('WEB_SITE_SLOGAN')}</title></block>
+<block name="main">
+    <div class="ttjilu-box container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4"></div>
+            <div class="col-xs-12 col-sm-4">
+                <form action="{:U('Home/Bet/doBet')}" method="post">
+                    <foreach name="sliders" item="slider">
+                        <div class="input-group input-group-lg">
+                    <span class="input-group-addon">
+                        <img src="{$slider.cover_url}"/>{$slider.title}
+                    </span>
+                            <input type="number" class="form-control" name="betdata[{$slider.hitnum}]" aria-label="">
+                            <span class="input-group-addon">分</span>
+                        </div>
+                        <div class="tt-h"></div>
+                        <div class="tt-h"></div>
+                    </foreach>
+                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
+                            <input type="hidden" name="term_id" value="{$term_id}">
+                            <input type="submit" class="btn btn-info" value="确定">
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <h4 class="text-center">我的竞猜记录</h4>
+
+            </div>
+        </div>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>投注积分</th>
+                <th>竞猜数字</th>
+                <th>竞猜图片</th>
+                <th>竞猜期数</th>
+                <th>竞猜时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <if condition="$list neq ''">
+                <foreach name="list" item="recharge">
+                    <tr>
+                        <td>{$recharge.id}</td>
+                        <td>
+
+                            {$recharge.money|default="0.00"} 积分
+                        </td>
+                        <td>
+                            {$recharge.bet_num}
+                        </td>
+                        <td>
+                            <img src="{:get_hit_num_img($recharge['bet_num'])}" width="50" alt="">
+                        </td>
+                        <td>
+                            {$recharge.term_id}
+                        </td>
+                        <td>{$recharge.addtime|date="Y-m-d H:i:s",###}</td>
+
+                        <!--<td>-->
+                        <!--<if condition="$recharge['status'] eq 1">-->
+                        <!--审核中-->
+                        <!--<elseif condition="$recharge['status'] eq 2" />-->
+                        <!--驳回申请-->
+                        <!--<elseif condition="$recharge['status'] eq 3"/>-->
+                        <!--充值成功-->
+                        <!--</if>-->
+                        <!--</td>-->
+                    </tr>
+                </foreach>
+                <else/>
+                <tr class="builder-data-empty">
+                    <td colspan="7" class="text-center empty-info">
+                        <i class="fa fa-database"></i> 暂时没有数据<br>
+                    </td>
+                </tr>
+            </if>
+            </tbody>
+        </table>
+        <ul class="pagination">{$page}</ul>
+    </div>
+</block>

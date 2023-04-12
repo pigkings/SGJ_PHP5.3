@@ -1,0 +1,86 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <style type="text/css">
+        .user-list .avatar {
+            width: 100%;
+        }
+        .contact-box {
+            height: 170px;
+            overflow: hidden;
+        }
+        .contact-box .summary {
+            height: 36px;
+            overflow: hidden;
+        }
+    </style>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function(){
+            //设置头像的高度与宽度保持一致
+            $('.user-list .avatar').height($(".user-list .avatar").width());
+        });
+    </script>
+</block>
+
+<block name="main">
+    <div class="container">
+        <div class="query-list">
+            <volist name="query_attribute" id="vo">
+                <div class="clearfix query-row">
+                    <div class="query-title">{$vo.title}</div>
+                    <div class="query-content">
+                        <ul class="list-unstyled list-inline">
+                            <li class="active"><a class="query-link" href="#" data-name="{$vo.name}" data-value="all">全部</a></li>
+                            <volist name="vo.options" id="option">
+                                <li class="
+                                    <?php 
+                                        if ($_GET[$vo['name']] == $key) {
+                                            echo 'active';
+                                        }
+                                    ?>">
+                                    <a class="query-link" href="#"
+                                        data-name="{$vo.name}"
+                                        data-value="{$key}">
+                                        {$option}
+                                    </a>
+                                </li>
+                            </volist>
+                        </ul>
+                    </div>
+                </div>
+            </volist>
+        </div>
+        <div class="row">
+            <div class="user-list clearfix">
+                <volist name="user_list" id="vo">
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        <div class="contact-box">
+                            <div class="contact-avatar col-xs-3 text-center">
+                                <a href="{:U('home', array('uid' => $vo['id']))}">
+                                    <img class="avatar img-circle img-responsive" src="{$vo.avatar|get_cover='avatar'}">
+                                </a>
+                                <div class="info font-bold">{$vo.position}</div>
+                             </div>
+                            <div class="contact-body col-xs-9">
+                                <a class="contact-title" href="{:U('home', array('uid' => $vo['id']))}">
+                                    <h3 class="text-overflow">{$vo.nickname}</h3>
+                                </a>
+                                <div class="contact-content">
+                                    <p><i class="fa fa-map-marker"></i> {$vo.city|default='中国'}</p>
+                                    <strong>{$vo.company|default='CoreThink'}</strong><br>
+                                    <span>加入：{$vo.create_time|time_format='Y-m-d'}</span><br>
+                                    <div class="summary">签名：{$vo.summary|default='啥都没有'}</div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </volist>
+            </div>
+        </div>
+        <ul class="pagination"><notempty name="page">{$page}</notempty></ul>
+    </div>
+</block>

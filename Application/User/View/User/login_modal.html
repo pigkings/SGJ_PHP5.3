@@ -1,0 +1,455 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/libs/bootstrap_validator/css/bootstrapValidator.min.css">
+<style type="text/css">
+    /* 验证码样式 */
+    .verifyimg-box {
+        padding: 0px;
+    }
+    .verifyimg-box .verifyimg {
+        width: 138px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+</style>
+
+<div class="modal fade" id="login-modal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">用户登录</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{:U('User/User/login')}" method="POST" class="form login-form-model" role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control input-lg" placeholder="邮箱/手机号/用户名" name="username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control input-lg" placeholder="请输入密码" name="password">
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="checkbox-inline" for="remember-login">
+                            <input id="remember-login" type="checkbox" name="remember_login" checked="checked">
+                            <span>保持登录</span>
+                        </label>
+                        <span class="pull-right">
+                            <a class="text-muted" href="{:U('User/User/resetPassword')}">忘记密码</a>
+                            <a class="text-muted" data-toggle="modal" href="#register-modal">注册帐号</a>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary-outline btn-lg btn-block submit ajax-post" target-form="login-form-model">登录</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="register-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">用户注册</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 后台管理员允许注册方式才会显示 -->
+                <php>
+                    $allow_reg_type = C('user_config.allow_reg_type');
+                    $user_type_list = D('User/Type')->where('status = 1')->select();
+                </php>
+                <?php if(count($allow_reg_type) !== 1): ?>
+                    <ul class="nav nav-pills nav-justified nav-justified-xs">
+                        <php>if(in_array('username', $allow_reg_type)):</php>
+                            <li data-tab="reg1" <php>if($allow_reg_type[0] === 'username') echo 'class="active"';</php>>
+                                <a href="#reg1" data-toggle="tab">用户名注册</a>
+                            </li>
+                        <php>endif;</php>
+                        <php>if(in_array('email', $allow_reg_type)):</php>
+                            <li data-tab="reg2" <php>if($allow_reg_type[0] === 'email') echo 'class="active"';</php>>
+                                <a href="#reg2" data-toggle="tab">邮箱注册</a>
+                            </li>
+                        <php>endif;</php>
+                        <php>if(in_array('mobile', $allow_reg_type)):</php>
+                            <li data-tab="reg3" <php>if($allow_reg_type[0] === 'mobile') echo 'class="active"';</php>>
+                                <a href="#reg3" data-toggle="tab">手机号注册</a>
+                            </li>
+                        <php>endif;</php>
+                    </ul>
+                <?php endif; ?>
+                <div class="form-group"></div>
+                <div class="tab-content">
+                    <php>if(in_array('username', $allow_reg_type)):</php>
+                        <div id="reg1" class="tab-pane <?php if($allow_reg_type[0] === 'username') echo "active"; ?>">
+                            <form action="{:U('User/User/register')}" method="post" class="form reg-form-username-modal">
+                                <fieldset>
+                                    <?php if(count($user_type_list) !== 1): ?>
+                                        <div class="form-group">
+                                            <volist name="user_type_list" id="utype">
+                                                <label class="radio-inline">
+                                                    <input type="radio" class="radio" name="user_type" value="{$utype.id}"> {$utype.title}
+                                                </label>
+                                            </volist>
+                                        </div>
+                                    <?php else: ?>
+                                        <input type="hidden" name="user_type" value="{$user_type_list[0]['id']}">
+                                    <?php endif; ?>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-lg" name="username" placeholder="请输入用户名">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control input-lg" name="password" placeholder="请输入密码">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-lg" name="verify" placeholder="请输入验证码">
+                                            <span class="input-group-addon verifyimg-box">
+                                                <img class="verifyimg reload-verify" alt="验证码" src="{:U('User/User/verify')}" title="点击刷新">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-lg" name="invite_code" value="{$_GET['code']}" placeholder="请输入邀请码">
+                                    </div>
+                                    <div class="form-group">
+                                        <span>点击下一步表示同意<a data-toggle="modal" href='#user_protocol-modal'>用户协议</a></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="reg_type" value="username">
+                                        <button class="btn btn-primary btn-pill btn-block btn-lg submit ajax-post" type="submit" target-form="reg-form-username-modal">下 一 步</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    <php>endif;</php>
+                    <php>if(in_array('email', $allow_reg_type)):</php>
+                        <div id="reg2" class="tab-pane <?php if($allow_reg_type[0] === 'email') echo "active"; ?>">
+                            <form action="{:U('User/User/register')}" method="post" class="form reg-form-email-modal">
+                                <fieldset>
+                                   <?php if(count($user_type_list) !== 1): ?>
+                                        <div class="form-group">
+                                            <volist name="user_type_list" id="utype">
+                                                <label class="radio-inline">
+                                                    <input type="radio" class="radio" name="user_type" value="{$utype.id}"> {$utype.title}
+                                                </label>
+                                            </volist>
+                                        </div>
+                                    <?php else: ?>
+                                        <input type="hidden" name="user_type" value="{$user_type_list[0]['id']}">
+                                    <?php endif; ?>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-lg" name="email" placeholder="请输入邮箱">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-lg" name="verify" placeholder="请输入验证码">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-lg send-mail-verify">发送邮件验证码</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control input-lg" name="password" placeholder="请输入密码">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-lg" name="invite_code" value="{$_GET['code']}" placeholder="请输入邀请码">
+                                    </div>
+                                    <div class="form-group">
+                                        <span>点击下一步表示同意<a data-toggle="modal" href='#user_protocol-modal'>用户协议</a></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="reg_type" value="email">
+                                        <button class="btn btn-primary btn-pill btn-block btn-lg submit ajax-post" type="submit" target-form="reg-form-email-modal">下 一 步</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    <php>endif;</php>
+                    <php>if(in_array('mobile', $allow_reg_type)):</php>
+                        <div id="reg3" class="tab-pane <?php if($allow_reg_type[0] === 'mobile') echo "active"; ?>">
+                            <form action="{:U('User/User/register')}" method="post" class="form reg-form-mobile-modal">
+                                <fieldset>
+                                    <?php if(count($user_type_list) !== 1): ?>
+                                        <div class="form-group">
+                                            <volist name="user_type_list" id="utype">
+                                                <label class="radio-inline">
+                                                    <input type="radio" class="radio" name="user_type" value="{$utype.id}"> {$utype.title}
+                                                </label>
+                                            </volist>
+                                        </div>
+                                    <?php else: ?>
+                                        <input type="hidden" name="user_type" value="{$user_type_list[0]['id']}">
+                                    <?php endif; ?>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-lg" name="mobile" placeholder="请输入手机号">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control input-lg" name="verify" placeholder="请输入验证码">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-lg send-mobile-verify">发送短信验证码</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" class="form-control input-lg" name="password" placeholder="请输入密码">
+                                    </div>
+                                    <div class="form-group">
+                                        <span>点击下一步表示同意<a data-toggle="modal" href='#user_protocol-modal'>用户协议</a></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="reg_type" value="mobile">
+                                        <button class="btn btn-primary btn-pill btn-block btn-lg submit ajax-post" type="submit" target-form="reg-form-mobile-modal">下 一 步</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    <php>endif;</php>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 用户协议弹窗 -->
+<div class="modal fade" id="user_protocol-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">用户协议</h4>
+            </div>
+            <div class="modal-body modal-body-scroller">
+                {:C('user_config.user_protocol')}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">同意</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PUBLIC__/libs/bootstrap_validator/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        // 表单验证－用户名
+        $('.reg-form-username-modal').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'fa fa-check',
+                invalid: 'fa fa-remove',
+                validating: 'fa fa-refresh'
+            },
+            fields: {
+                username: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入用户名'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '用户名长度为6到30个字符'
+                        },
+                        regexp: {
+                            regexp: /^(?!_)(?!\d)(?!.*?_$)[\w]+$/,
+                            message: '用户名只可含有数字、字母、下划线且不以下划线开头结尾，不以数字开头！'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入密码'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '密码长度为6到30个字符'
+                        },
+                        regexp: {
+                            regexp: /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_+{}:"<>?\-=[\];\',.\/]+)$)^[\w~!@#$%^&*()_+{}:"<>?\-=[\];\',.\/]+$/,
+                            message: '密码需包含字母、数字、符号中的两种'
+                        }
+                    }
+                },
+                verify: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入验证码'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 表单验证－邮箱
+        $('.reg-form-email-modal').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'fa fa-check',
+                invalid: 'fa fa-remove',
+                validating: 'fa fa-refresh'
+            },
+            fields: {
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入邮箱'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '邮箱长度为6到30个字符'
+                        },
+                        regexp: {
+                            regexp: /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/,
+                            message: '邮箱格式不正确'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入密码'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '密码长度为6到30个字符'
+                        },
+                        regexp: {
+                            regexp: /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_+{}:"<>?\-=[\];\',.\/]+)$)^[\w~!@#$%^&*()_+{}:"<>?\-=[\];\',.\/]+$/,
+                            message: '密码需包含字母、数字、符号中的两种'
+                        }
+                    }
+                },
+                verify: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入验证码'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 表单验证－手机号
+        $('.reg-form-mobile-modal').bootstrapValidator({
+            feedbackIcons: {
+                valid: 'fa fa-check',
+                invalid: 'fa fa-remove',
+                validating: 'fa fa-refresh'
+            },
+            fields: {
+                mobile: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入手机号'
+                        },
+                        regexp: {
+                            regexp: /^1\d{10}$/,
+                            message: '手机号格式不正确'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入密码'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 30,
+                            message: '密码长度为6到30个字符'
+                        },
+                        regexp: {
+                            regexp: /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_+{}:"<>?\-=[\];\',.\/]+)$)^[\w~!@#$%^&*()_+{}:"<>?\-=[\];\',.\/]+$/,
+                            message: '密码需包含字母、数字、符号中的两种'
+                        }
+                    }
+                },
+                verify: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入验证码'
+                        }
+                    }
+                }
+            }
+        });
+
+        //发送验证码倒计时
+        function time(that, wait){
+            if(wait == 0){
+                $(that).removeClass('disabled').prop('disabled',false);
+                $(that).html('重新发送验证码');
+            }else{
+                $(that).html(wait+'秒后重新发送');
+                wait--;
+                setTimeout(function(){
+                    time(that, wait);
+                }, 1000);
+            }
+        }
+
+        $(document).delegate('.reg-form-email-modal .send-mail-verify', 'click', function() {
+            var url = '';
+            var that = this;
+            if(url = "{:U('User/User/SendMailVerify')}"){
+                var email = $('input[name="email"]').val();
+                var filter  = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if(!filter.test(email)){
+                    $.alertMessager('邮箱账号不正确', 'danger');
+                    $(that).addClass('disabled').prop('disabled', true);
+                    time(that, 5);
+                }else{
+                    $(that).addClass('disabled').prop('disabled', true);
+                    time(that, 1);
+                    $.post(url,{'email':email, 'title':'用户注册'}).success(function(data){
+                        message = data.info;
+                        if(data.status == 1){
+                            $.alertMessager(data.info, 'success');
+                        }else{
+                            $.alertMessager(data.info, 'danger');
+                        }
+                    });
+                }
+            }
+            return false;
+        });
+
+        $(document).delegate('.reg-form-mobile-modal .send-mobile-verify', 'click', function() {
+            var url;
+            var that = this;
+            if(url = "{:U('User/User/sendMobileVerify')}"){
+                var mobile = $('input[name="mobile"]').val();
+                var filter  = /^1\d{10}$/;
+                if(!filter.test(mobile)){
+                    $.alertMessager('手机号码不正确', 'danger');
+                    $(that).addClass('disabled').prop('disabled', true);
+                    time(that, 5);
+                }else{
+                    $(that).addClass('disabled').prop('disabled', true);
+                    time(that, 30);
+                    $.post(url,{'mobile':mobile, 'title':'用户注册'}).success(function(data){
+                        if(data.status == 1){
+                            $.alertMessager(data.info, 'success');
+                        }else{
+                            $.alertMessager(data.info, 'danger');
+                        }
+                    });
+                }
+            }
+            return false;
+        });
+        // 刷新验证码
+        $(".reload-verify").on('click', function() {
+            var verifyimg = $(this).attr("src");
+            if (verifyimg.indexOf('?') > 0) {
+                $(this).attr("src", verifyimg + '&random=' + Math.random());
+            } else {
+                $(this).attr("src", verifyimg.replace(/\?.*$/, '') + '?' + Math.random());
+            }
+        });
+    });
+</script>

@@ -1,0 +1,73 @@
+<extend name="$_home_public_layout"/>
+
+
+<block name="main">
+    <style>
+        .right {
+            float: right;
+            width: 80%;
+        }
+    </style>
+    <div class="container">
+        <div class="row ucenter-row">
+            <div class="col-xs-12 col-md-3">
+                <include file="$_user_center_side"/><!-- 包含用户中心侧边导航 -->
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                <div class="builder listbuilder-box panel-body">
+                    <!-- Tab导航 -->
+
+                    <!-- 数据列表 -->
+                    <div class="builder-container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="builder-table">
+                                    <div class="panel panel-default table-responsive">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>用户名称</th>
+                                                <th>充值金额</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <if condition="$list neq ''">
+                                                <foreach name="list" item="recharge">
+                                                    <tr>
+                                                        <td>{$recharge.id}</td>
+                                                        <td>{:get_user_info($recharge['user_id'],'username')}</td>
+                                                        <td>
+
+                                                            {$recharge.money|default="0.00"} 积分
+                                                        </td>
+                                                    </tr>
+                                                </foreach>
+                                                <else />
+                                                <tr class="builder-data-empty">
+                                                    <td colspan="7" class="text-center empty-info">
+                                                        <i class="fa fa-database"></i> 暂时没有数据<br>
+                                                        <span class="small">本系统由 <a target="_blank" class="text-muted"
+                                                                                    href="">{:C('WEB_SITE_TITLE')}</a> 强力驱动</span>
+                                                    </td>
+                                                </tr>
+                                            </if>
+
+                                            </tbody>
+                                        </table>
+                                        <ul class="pagination">{$page}</ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 额外功能代码 -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</block>

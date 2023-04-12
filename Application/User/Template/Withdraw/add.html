@@ -1,0 +1,44 @@
+<extend name="$_user_layout"/>
+<block name="main">
+    <section>
+        <div class="span12">
+            <form class="login-form" action="{:U('User/Withdraw/add')}" method="post">
+                <php>
+                    $userAccount = get_user_account($uid);
+                </php>
+                <h3 class="loginf_h3tt"><span>你的可兑换积分为：</span><em>{$userAccount.account|default=0.00}</em>积分</h3>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputMoney">兑换积分</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputMoney" class="span3" placeholder="请输入积分" errormsg="请输入积分" nullmsg="请填写积分" datatype="*"  name="money">
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputCardNo">提现账户</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputCardNo" class="span3" placeholder="请输入支付宝账号"  name="user_remark">
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" >提现方式</label>
+                    <div class="controls pull-left">
+                        <label for="aliPay" style="color: white;margin-top: 10px"><input checked="checked"  type="radio" name="type" value="1" id="aliPay" >支付宝</label>
+
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputTel">姓名</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputTel" class="span3" placeholder="请输入姓名"  name="account_number">
+                    </div>
+                </div>
+                <div class="control-group1">
+                    <div class="controls">
+                        <div class="controls Validform_checktip text-warning"></div>
+                        <button type="submit" class="btn btnsubmit">提 交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</block>

@@ -1,0 +1,81 @@
+<extend name="$_home_public_layout"/>
+
+
+<block name="main">
+    <style>
+        .right {
+            float: right;
+            width: 80%;
+        }
+    </style>
+    <div class="container">
+        <div class="row ucenter-row">
+            <div class="col-xs-12 col-md-3">
+                <include file="$_user_center_side"/><!-- 包含用户中心侧边导航 -->
+            </div>
+            <div class="col-xs-12 col-md-9">
+
+                <div class="builder formbuilder-box panel-body">
+                    <div class="builder-container">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <form class="form-horizontal form form-builder" method="post" action="{:U('User/Withdraw/add')}">
+                                    <div class="col-xs-12">
+                                        <div class="form-group"></div>
+                                        <div class="builder-tabs form-group">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active" data-tab="tab1"><a data-toggle="tab" href="#tab1">兑换申请</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="builder-container">
+                                            <div class="tab-content">
+                                                <div class="tab-pane active tab1" id="tab1">
+                                                    <div class="group">
+                                                        <div class="form-group item_nickname ">
+                                                            <label class="left control-label">积分数量：</label>
+                                                            <div class="right">
+                                                                <input type="text"  name="money" class="form-control input text">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group item_city ">
+                                                            <label class="left control-label">备注：</label>
+                                                            <div class="right">
+                                                                <textarea class="form-control" name="user_remark" id="" cols="30"
+                                                                          rows="10"></textarea>
+                                                                <span class="check-tips text-muted small">备注信息</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <hr>
+                                        </div>
+                                        <div class="form-group"></div>
+                                        <div class="form-group">
+                                            <button target-form="form-builder" type="submit"
+                                                    class="btn btn-primary btn-block submit ajax-post visible-xs visible-sm">
+                                                确定
+                                            </button>
+                                            <button target-form="form-builder" type="submit"
+                                                    class="btn btn-primary submit ajax-post visible-md-inline visible-lg-inline">
+                                                确定
+                                            </button>
+                                            <button onclick="javascript:history.back(-1);return false;"
+                                                    class="btn btn-default return visible-md-inline visible-lg-inline">
+                                                返回
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

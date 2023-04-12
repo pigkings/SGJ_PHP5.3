@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <block name="title"><title>{$meta_title}｜{:C('WEB_SITE_TITLE')}－{:C('WEB_SITE_SLOGAN')}</title></block>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="author" content="{:C('WEB_SITE_TITLE')}">
+    <meta name="keywords" content="{$meta_keywords}">
+    <meta name="description" content="{$meta_description}">
+    <meta name="generator" content="CoreThink">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="{:C('WEB_SITE_TITLE')}">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link rel="shortcut icon" type="image/x-icon" href="__ROOT__/favicon.ico">
+    <link rel="apple-touch-icon" type="image/x-icon" href="__ROOT__/logo.png">
+
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.min.css">
+    <link rel="stylesheet" type="text/css" href="__HOME_CSS__/style.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/libs/cloud9carousel/css/common.css">
+    <link rel="stylesheet" type="text/css" href="__HOME_CSS__/home.css">
+
+
+    <block name="style"></block>
+    <!--[if lt IE 9]>
+        <script src="http://cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
+        <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="__PUBLIC__/libs/jquery/1.x/jquery.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/libs/cloud9carousel/js/jquery.cloud9carousel.js"></script>
+</head>
+
+<body>
+    <div class="clearfix hook hook-page-header">
+        {:hook('PageHeader')} <!-- 文档开始钩子 -->
+    </div>
+
+    <block name="wrap">
+        <div class="clearfix full-wrap">
+            <div class="clearfix full-header">
+                <block name="header">
+                    <block name="top-nav">
+                        <nav class="navbar navbar-default navbar-mini top-nav hidden-xs hidden-sm" role="navigation">
+                            <div class="container">
+                                <div class="collapse navbar-collapse">
+                                    <ul class="nav navbar-nav" style="margin-left:-15px">
+                                        <li><a href="#">您好，欢迎来到 {:C('WEB_SITE_TITLE')} ！</a></li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </nav>
+                    </block>
+
+                    <block name="main-nav">
+                        <nav class="navbar navbar-default main-nav" role="navigation">
+                            <div class="container">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-main">
+                                        <span class="sr-only">切换导航</span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                        <span class="icon-bar"></span>
+                                    </button>
+                                    <php>if(C('WEB_SITE_LOGO')):</php>
+                                        <a class="navbar-brand" href="/">
+                                            <img alt="logo" src="{$Think.config.WEB_SITE_LOGO|get_cover}">
+                                        </a>
+                                    <php>else:</php>
+                                        <a class="navbar-brand" href="/">
+                                            <span>{:C('PRODUCT_LOGO')}</span>
+                                        </a>
+                                    <php>endif;</php>
+                                </div>
+                                <div class="collapse navbar-collapse navbar-collapse-main">
+
+                                    <ul class="nav navbar-nav navbar-right">
+                                        <present name="_user_auth">
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <img class="nav-img img-circle" src="{$_user_auth.avatar|get_cover='avatar'}" alt="{$_user_auth.nickname}">
+                                                    <span">
+                                                        {$_user_auth.nickname}
+                                                        <span class="badge badge-danger">{$_new_message}</span> <!-- 新消息数量 -->
+                                                    </span>
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+
+                                                    <volist name="_user_nav_main" id="vo_nav">
+                                                        <li><a href="{:U($vo_nav['url'])}" class="{$vo_nav.class}"><i class="{$vo_nav.icon}"></i> {$vo_nav.title}</a></li>
+                                                    </volist>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li><a href="{:U('User/User/logout')}" class="ajax-get"><i class="fa fa-sign-out"></i> 注销登录</a></li>
+                                                </ul>
+                                            </li>
+                                        <else />
+                                            <div class="navbar-right">
+                                                <a class="btn btn-success navbar-btn" data-toggle="modal" href="#register-modal">注册</a>
+                                                <a class="btn btn-primary navbar-btn" data-toggle="modal" href="#login-modal">登录</a>
+                                            </div>
+                                        </present>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </block>
+                </block>
+            </div>
+
+            <div class="clearfix full-container">
+                <block name="jumbotron">
+                    <div class="jumbotron jumbotron-primary jumbotron-background main-jumbotron text-center">
+                        <h4>{:C('WEB_JINGCAI_TIP')}</h4>
+                    </div>
+                </block>
+
+                <div id="main" class="main">
+                    <block name="main">这里是内容</block>
+                </div>
+            </div>
+
+            <div class="clearfix full-foooter">
+                <block name="footer">
+                    <div class="footer">
+                        <div class="container">
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <div class="text-center">{:C('WEB_SITE_COPYRIGHT')}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </block>
+            </div>
+        </div>
+    </block>
+
+    <div class="clearfix hook hook-page-footer">
+        {:hook('PageFooter')} <!-- 文档末尾钩子 -->
+    </div>
+
+    <div class="clearfix full-script">
+        <div class="container-fluid">
+            <include file="$_user_login_modal" /> <!-- 登录弹窗 -->
+            <input type="hidden" id="corethink_home_img" value="__HOME_IMG__">
+            <script type="text/javascript" src="__CUI__/js/cui.min.js"></script>
+            <script type="text/javascript" src="__HOME_JS__/home.js"></script>
+            <script type="text/javascript" src="__HOME_JS__/num.js"></script>
+            <block name="script"></block>
+        </div>
+    </div>
+    <script>
+        var lastTime = {$openTime};
+        var intDiff = parseInt(lastTime);//倒计时总秒数量
+
+        function timer(intDiff){
+            window.setInterval(function(){
+                var day=0,
+                        hour=0,
+                        minute=0,
+                        second=0;//时间默认值
+                if(intDiff > 0){
+                    day = Math.floor(intDiff / (60 * 60 * 24));
+                    hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                    minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                    second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+                }else{
+//                    alert(111);
+                    window.location.reload();
+//                    return false;
+                }
+                if (minute <= 9) minute = '0' + minute;
+                if (second <= 9) second = '0' + second;
+//                $('#day_show').html(day+"天");
+//                $('#hour_show').html('<s id="h"></s>'+hour+'时');
+//                $('#minute_show').html('<s></s>'+minute+'分');
+//                $('#second_show').html('<s></s>'+second+'秒');
+                $('#minute_show_min').html('<s></s>'+minute);
+                $('#second_show_second').html('<s></s>'+second);
+                intDiff--;
+            }, 1000);
+        }
+
+        $(function(){
+            timer(intDiff);
+        });
+        $(function(){
+            $("#carousel").Cloud9Carousel( {
+                buttonLeft: $("#buttons > .left"),
+                buttonRight: $("#buttons > .right"),
+                autoPlay: 1,
+                bringToFront: true,
+                speed:10,
+                autoPlayDelay:1000
+            } );
+        });
+    </script>
+</body>
+</html>

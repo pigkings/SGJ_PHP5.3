@@ -1,0 +1,52 @@
+<extend name="$_user_layout"/>
+<block name="main">
+    <div class="table-responsive" style="background: #fff;padding: 1em;border-radius: .5em;">
+        <table class="table">
+            <caption>投注记录</caption>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>投注积分</th>
+                <th>竞猜数字</th>
+                <th>竞猜图片</th>
+                <th>竞猜期数</th>
+                <th>竞猜时间</th>
+                <th>是否中奖</th>
+            </tr>
+            </thead>
+            <tbody>
+            <empty name="list">
+                <tr>
+                    <td colspan="4">
+                        没有记录
+                    </td>
+                </tr>
+                <else />
+                <foreach name="list" item="recharge">
+                    <tr>
+                        <td>{$recharge.id}</td>
+                        <td>
+
+                            {$recharge.money|default="0.00"} 积分
+                        </td>
+                        <td>
+                            {$recharge.bet_num}
+                        </td>
+                        <td>
+                            <img src="{:get_hit_num_img($recharge['bet_num'])}"  width="50" alt="">
+                        </td>
+                        <td>
+                            {$recharge.term_id}
+                        </td>
+                        <td>{$recharge.addtime|date="Y-m-d H:i:s",###}</td>
+                        <td>
+                            {$recharge.award}
+                        </td>
+                    </tr>
+                </foreach>
+            </empty>
+            </tbody>
+        </table>
+        <ul class="pagination">{$page}</ul>
+    </div>
+</block>

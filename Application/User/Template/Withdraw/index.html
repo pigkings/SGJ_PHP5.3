@@ -1,0 +1,53 @@
+﻿<extend name="$_user_layout"/>
+<block name="main">
+    <div class="table-responsive" style="background: #fff;padding: 1em;border-radius: .5em;">
+        <table class="table">
+            <caption>提现记录</caption>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>提现金额</th>
+                <th>提交时间</th>
+                <th>申请IP</th>
+                <th>备注信息</th>
+                <th>状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <if condition="$list neq ''">
+                <foreach name="list" item="recharge">
+                    <tr>
+                        <td>{$recharge.id}</td>
+                        <td>{$recharge.money|default="0.00"} 积分</td>
+                        <td>{$recharge.addtime|date="Y-m-d H:i:s",###}</td>
+                        <td>{$recharge.apply_ip}</td>
+                        <td>
+                            <if condition="$recharge.op_remark neq ''">
+                                {$recharge.op_remark}
+                                <else />
+                                未填写
+                            </if>
+                        </td>
+                        <td>
+                            <if condition="$recharge['status'] eq 1">
+                                审核中
+                                <elseif condition="$recharge['status'] eq 2" />
+                                驳回申请
+                                <elseif condition="$recharge['status'] eq 3"/>
+                                提现成功
+                            </if>
+                        </td>
+                    </tr>
+                </foreach>
+                <else />
+                <tr class="builder-data-empty">
+                    <td colspan="7" class="text-center empty-info">
+                        <i class="fa fa-database"></i> 暂时没有数据<br>
+                    </td>
+                </tr>
+            </if>
+            </tbody>
+        </table>
+        <ul class="pagination">{$page}</ul>
+    </div>
+</block>

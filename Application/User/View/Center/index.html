@@ -1,0 +1,23 @@
+<extend name="$_home_public_layout"/>
+
+<block name="main">
+    <div class="container">
+        <div class="row ucenter-row">
+            <div class="col-xs-12 col-md-3">
+                <include file="$_user_center_side" /><!-- 包含用户中心侧边导航 -->
+            </div>
+            <div class="col-xs-12 col-md-9">
+                <div class="panel">
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt class="time">用户名：</dt><dd>{$user_info.username}</dd>
+                            <dt class="time">注册时间：</dt><dd class="time">{$user_info.create_time|friendly_date}</dd>
+                        </dl>
+                        <div class="alert alert-warning">签名：{$user_info.summary}</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

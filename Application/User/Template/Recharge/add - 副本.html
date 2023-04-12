@@ -1,0 +1,36 @@
+﻿<extend name="$_user_layout"/>
+<block name="main">
+    {$pay_online}
+    <section>
+        <div class="span12">
+
+            <div class="login-form">
+                <h3 class="loginf_h3tt">在线充值 </h3>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputCardNo">积分</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputCardNo" class="span3" placeholder="请输入充值积分"  name="money">
+                    </div>
+                </div>
+                <div class="control-group1">
+                    <div class="controls">
+                        <div class="controls Validform_checktip text-warning"></div>
+                        <button class="btn btnsubmit">充 值</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+    $(function () {
+        $(".btnsubmit").click(function () {
+            var money =$('#inputCardNo').val();
+            window.location.href="/user/recharge/pay/money/"+money; 
+        });
+    });
+</script>
+
+
+    </section>
+
+</block>

@@ -1,0 +1,98 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <style type="text/css">
+        .profile-header {
+            height:360px;
+        }
+        .profile-header .user-button .btn-default {
+            color: #fff;
+            border-color: #fff;
+            background: none;
+        }
+        .profile-header .user-button .btn-default:hover,
+        .profile-header .user-button .btn-default.active {
+            color: #3EA9F5;
+            background: #fff;
+        }
+    </style>
+</block>
+
+<block name="jumbotron">
+    <div class="profile-header text-center bg-primary">
+        <div class="container-fluid">
+            <div class="container-inner">
+                <img class="img-circle media-object" src="{$user_info.avatar|get_cover='avatar'}">
+                <h3 class="profile-header-user">{$user_info.nickname}</h3>
+                <p class="profile-header-bio">{$user_info.summary}</p>
+            </div>
+            <div class="user-button">
+                <div class="row">
+                    <div class="hidden-xs col-md-4"></div>
+                    <div class="col-xs-6 col-md-2">
+                        <a href="{:U('User/Talk/index', array('to_uid' => $user_info['id']))}" class="btn btn-default btn-sm"><i class="fa fa-envelope"></i> 发私信</a>
+                    </div>
+                    <div class="col-xs-6 col-md-2">
+                        <?php if ($user_info['follow_status']) :?>
+                            <button type="button" class="btn btn-default active btn-sm ajax-follow"
+                                url="{:U('User/Follow/add', array('uid' => $user_info['id']))}">
+                                    <i class="fa fa-check"></i> 已关注
+                            </button>
+                        <?php else :?>
+                            <button type="button" class="btn btn-default btn-sm ajax-follow"
+                                url="{:U('User/Follow/add', array('uid' => $user_info['id']))}">
+                                    <i class="fa fa-plus"></i> 加关注
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="profile-header-nav">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">动态</a></li>
+                <li><a href="http://www.baidu.com">照片</a></li>
+                <li><a href="#">其它</a></li>
+            </ul>
+        </nav>
+    </div>
+</block>
+
+<block name="main"></block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function(){
+            //关注
+            $(document).delegate('.ajax-follow', 'click', function() {
+                var target;
+                var that = this;
+                if (target = $(this).attr('url')) {
+                    $.get(target).success(function(data){
+                        if (data.status == 1) {
+                            if(data.follow_status == 1){
+                                $(that).removeClass('btn-default');
+                                $(that).addClass('active');
+                                $(that).html('<i class="fa fa-check"></i> 已关注');
+                                $.alertMessager(data.info, 'success');
+                            }else{
+                                $(that).addClass('btn-default');
+                                $(that).removeClass('active');
+                                $(that).html('<i class="fa fa-plus"></i> 加关注');
+                                $.alertMessager(data.info, 'success');
+                            }
+                        } else {
+                            if(data.login == 1){
+                                $('#login-modal').modal(); //弹出登陆框
+                            }else{
+                                $.alertMessager(data.info, 'danger');
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+</block>

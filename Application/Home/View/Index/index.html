@@ -1,0 +1,137 @@
+<extend name="$_home_public_layout"/>
+
+<block name="title"><title>{:C('WEB_SITE_TITLE')}－{:C('WEB_SITE_SLOGAN')}</title></block>
+
+<block name="style">
+
+</block>
+
+
+
+<block name="main">
+    <!--http://www.htmleaf.com/Demo/201507052168.html-->
+    <div id="carousel">
+        <foreach name="sliderlist" item="vo">
+            <img class="cloud9-item" src="{$vo.cover_url}" alt="{$vo.title}">
+        </foreach>
+    </div>
+
+    <!--<div id="buttons">-->
+        <!--<button class="left">-->
+            <!--←-->
+        <!--</button>-->
+        <!--<button class="right">-->
+            <!--→-->
+        <!--</button>-->
+    <!--</div>-->
+    <div class="tt-box container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tcon-box">
+                    <h5 class="text-center">当前在线人数</h5>
+                    <div class="online-num"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tcon-box">
+                    <!--获取最后一期尚未开奖的信息-->
+                    <php>
+                        $lastUnopenTerm = get_last_unopen_term();
+                        $openTime = ($lastUnopenTerm['end_time']- time())?:0;
+                    </php>
+                    <h5 class="text-center">当前第<span>{$lastUnopenTerm.id}</span>期,竞猜倒计时</h5>
+                    <div style="padding-top: 5px;" class="time-item">
+                        <strong id="minute_show">
+                            <p>分</p>
+                            <font id="minute_show_min">0</font>
+                        </strong>
+                        <strong id="second_show">
+                            <p>秒</p>
+                            <font id="second_show_second">0</font>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tcon-box">
+                    <h5 class="text-center"><a href="{:U('Home/Bet/bet',array('term_id'=>$lastUnopenTerm['id']))}" class="btn btn-danger ">开始竞猜</a></h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!--获取最后一期开奖结果-->
+                <php>
+                    $lastOpenTerm = get_last_opened_term();
+                </php>
+                <div class="tcon-box">
+                    <if condition="$lastOpenTerm.hit_num">
+                        <h5 class="text-center">第<span>{$lastOpenTerm.id}</span>期开奖结果</h5>
+                        <div style="padding-top: 5px;" class="tt-jieguo">
+                            <img src="{:get_hit_num_img($lastOpenTerm['hit_num'])}"/>
+                        </div>
+                        <else />
+                        <!--<h5 class="text-center">第<span>19</span>期开奖结果</h5>-->
+                        <!--<div style="padding-top: 5px;" class="tt-jieguo">-->
+                            <!--<img src="__PUBLIC__/libs/cloud9carousel/images/browsers/chrome.png"/>-->
+                        <!--</div>-->
+                    </if>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="tt-h"></div>
+<div class="tt-h"></div>
+    <div class="ttjilu-box container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>场次</th>
+                        <th>结果</th>
+                        <th>场次</th>
+                        <th>结果</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <foreach name="termList" item="term" key="k">
+                            <if condition="($k%2) eq 0">
+                                <tr>
+                            <th scope="row">{$term.id}</th>
+                            <td>
+                                <img width="20px" src="{:get_hit_num_img($term['hit_num'])}" alt="{$term.hit_num}" title="{$term.hit_num}">
+                            </td>
+                                <elseif condition="($k%2) eq 1"/>
+                                <th scope="row">{$term.id}</th>
+                                <td>
+                                    <img width="20px" src="{:get_hit_num_img($term['hit_num'])}" alt="{$term.hit_num}" title="{$term.hit_num}">
+                                </td>
+                                </tr>
+                            </if>
+                    </foreach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 代码部分begin -->
+
+
+	
+
+</block>
+
+
+
+<div style="display:none;">
+<script src="https://s19.cnzz.com/z_stat.php?id=1263839154&web_id=1263839154" language="JavaScript"></script>
+</div>

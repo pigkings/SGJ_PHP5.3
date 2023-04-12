@@ -1,0 +1,78 @@
+<extend name="$_admin_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.extend.min.css">
+</block>
+
+<block name="script">
+    <script type="text/javascript" src="__CUI__/js/cui.extend.min.js"></script>
+    <script src="__PUBLIC__/libs/chart/1.x/Chart.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            // 用户增长曲线图
+            var chart_data = {
+                labels: {$user_reg_date},
+                datasets: [{
+                    label: "用户增长曲线图",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: {$user_reg_count}
+                }]
+            };
+            var chart_options = {
+                scaleLineColor : "rgba(0,0,0,.1)", //X/Y轴的颜色
+                scaleLineWidth : 1, //X/Y轴的宽度
+            };
+            var chart_element = document.getElementById("mychart").getContext("2d");
+            var myLine = new Chart(chart_element).Line(chart_data, chart_options);
+
+            // 日期
+            $('#start_date').datetimepicker({
+                format      : 'yyyy-mm-dd',
+                autoclose   : true,
+                minView     : 'month',
+                todayBtn    : 'linked',
+                language    : 'en',
+                initialDate : '{$start_date}',
+                fontAwesome : true,
+            });
+            $('#end_date').datetimepicker({
+                format      : 'yyyy-mm-dd',
+                autoclose   : true,
+                minView     : 'month',
+                todayBtn    : 'linked',
+                language    : 'en',
+                initialDate : '{$end_date}',
+                fontAwesome : true,
+            });
+        });
+    </script>
+</block>
+
+<block name="main">
+    <div class="chart">
+        <div class="panel-body">
+            <div class="col-xs-12 col-sm-6 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart"></i> 用户增长统计
+                    </div>
+                    <div class="panel-body">
+                        <h5 class="text-center">
+                            <form action="{:U('')}" method="get">
+                                <input id="start_date" name="start_date" value="{$start_date}"> 至
+                                <input id="end_date" name="end_date" value="{$end_date}">
+                                <input id="submit" type="submit" class="btn btn-xs btn-default search-btn" value="查询">
+                            </form>
+                        </h5>
+                        <canvas id="mychart" style="width:100%;height:300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

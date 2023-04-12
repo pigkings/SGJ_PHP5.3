@@ -1,0 +1,184 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{:C('WEB_SITE_TITLE')}</title>
+    <meta name="viewport"
+          content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <link href="__HOME_CSS__/bootstrap.css" rel="stylesheet">
+    <link href="__HOME_CSS__/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="__HOME_JS__/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <link href="__HOME_CSS__/style.css" rel="stylesheet">
+    <block name="style"></block>
+    <!-- 页面header钩子，一般用于加载插件CSS文件和代码 -->
+</head>
+<body>
+<!-- 头部 -->
+<!-- 导航条
+================================================== -->
+<script type="text/javascript">
+    $(function () {
+        $(".navbar-toggle").click(function () {
+            if ($(".navbar-collapse").hasClass("collapse")) {
+                $(".navbar-collapse").removeClass("collapse");
+            } else {
+                $(".navbar-collapse").addClass("collapse");
+            }
+        })
+    })
+</script>
+<div class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">{:C('WEB_NAME')}</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="{:U('User/Center/index')}" target="_self">投注</a>
+                </li>
+                <li><a href="{:U('User/Win/index')}" >中奖记录</a></li>
+            </ul>
+            <present name="_user_auth">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle"
+                           data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{$_user_auth.nickname} <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{:U('User/Center/password')}">修改密码</a></li>
+                            <hr>
+                            <li><a href="{:U('User/User/logout')}">退出</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <else/>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{:U('User/User/login')}">登录</a>
+                    </li>
+                    <li>
+                        <a href="{:U('User/User/toregist')}">注册</a>
+                    </li>
+                </ul>
+            </present>
+        </div>
+    </div>
+</div>
+<!-- /头部 -->
+
+<!-- 主体 -->
+
+<div id="main-container" class="container">
+    <div class="row">
+
+
+        <style type="text/css">
+            body {
+                background: url(__HOME_IMG__/bodybg.jpg) /*tpa=http://www.fafa8889.com/Public/Home/images/bodybg.jpg*/ no-repeat !important;
+                background-size: cover !important;
+            }
+        </style>
+
+
+    </div>
+    <block name="main">
+
+    </block>
+</div>
+<!-- /主体 -->
+
+<!-- 底部 -->
+<!-- 底部
+================================================== -->
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container">
+        <ul class="nav navbar-nav navbar-navreset">
+            <li><a href="{:U('User/Bet/index')}" >下注记录</a></li>
+            <li><a href="{:U('User/Account/index')}" >积分记录</a></li>
+
+        </ul>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    (function () {
+        var ThinkPHP = window.Think = {
+            "ROOT": "", //当前网站地址
+            "APP": "", //当前项目地址
+            "PUBLIC": "/Public/Home", //项目公共目录地址
+            "DEEP": "/", //PATHINFO分割符
+            "MODEL": ["2", "", "html"],
+            "VAR": ["m", "c", "a"]
+        }
+    })();
+</script>
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__HOME_JS__/jquery-1.10.2.min.js"></script>
+<![endif]-->
+<!--[if gte IE 9]><!-->
+<script type="text/javascript" src="__HOME_JS__/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="__HOME_JS__/bootstrap.min.js"></script>
+<script type="text/javascript" src="__HOME_JS__/soundmanager2-jsmin.js"></script>
+<script src="__PUBLIC__/libs/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<!--<![endif]-->
+
+<script type="text/javascript">
+    $(document)
+/*            .ajaxStart(function () {
+                $("button:submit").addClass("log-in").attr("disabled", true);
+            })
+            .ajaxStop(function () {
+                $("button:submit").removeClass("log-in").attr("disabled", false);
+            });
+*/
+
+    $("form").submit(function () {
+        var self = $(this);
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+
+        function success(data) {
+            if (data.status) {
+                layer.msg(data.info);
+                window.location.href = data.url;
+            } else {
+//                self.find(".Validform_checktip").text(data.info);
+                layer.msg(data.info);
+                //刷新验证码
+                $(".reload-verify").click();
+            }
+        }
+    });
+
+    $(function () {
+        // 刷新验证码
+        $(".reload-verify").on('click', function () {
+            var verifyimg = $(this).attr("src");
+            if (verifyimg.indexOf('?') > 0) {
+                $(this).attr("src", verifyimg + '&random=' + Math.random());
+            } else {
+                $(this).attr("src", verifyimg.replace(/\?.*$/, '') + '?' + Math.random());
+            }
+        });
+    });
+</script>
+<!-- 用于加载js代码 -->
+<!-- 页面footer钩子，一般用于加载插件JS文件和JS代码 -->
+<div class="hidden"><!-- 用于加载统计代码等隐藏元素 -->
+
+</div>
+<block name="javascript"></block>
+
+<!-- /底部 -->
+</body>
+</html>

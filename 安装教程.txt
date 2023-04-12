@@ -1,0 +1,8 @@
+环境 PHP5.3+Mysql
+后台地址：http://127.0.0.1/admin.php?s=/admin/public/login.html
+账号密码admin admin888
+
+
+数据库名&账号&密码：guessgame
+
+将数据库文件  shuiguo.sql导入即可

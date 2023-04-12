@@ -1,0 +1,67 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <style type="text/css">
+        .is_read,
+        .is_read a {
+            color: #ccc;
+        }
+    </style>
+</block>
+
+<block name="main">
+    <div class="container">
+        <div class="row ucenter-row">
+            <div class="col-xs-12 col-md-3">
+                <include file="$_user_center_side" /><!-- 包含用户中心侧边导航 -->
+            </div>
+            <div class="col-xs-12 col-md-9">
+                <div class="panel">
+                    <div class="panel-body">
+                        <ul class="nav-tabs nav">
+                            <volist name="message_type" id="type">
+                                <li class="<php>if($current_type == $key) echo 'active';</php>">
+                                    <a href="{:U('', array('type' => $key))}">{$type} <span class="badge badge-danger">{$new_message_type[$key]}</span></a>
+                                </li>
+                            </volist>
+                        </ul>
+                        <div class="form-group"></div>
+                        <div class="toolbar">
+                            <a class="btn btn-info ajax-post" target-form="ids" href="{:U('setRead')}">设为已读</a>
+                        </div>
+                        <div class="form-group"></div>
+                        <div class="tab-content">
+                            <div class="panel panel-default table-responsive">
+                                <table class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th><input class="check-all" type="checkbox"></th>
+                                            <th>消息</th>
+                                            <th>时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <volist name="message_list" id="vo">
+                                            <tr>
+                                                <td><input class="ids" type="checkbox" value="{$vo.id}" name="ids[]"></td>
+                                                <td>
+                                                    <a href="{:U('detail', array('id' => $vo['id']))}" class="<php>if($vo['is_read']){echo 'is_read';}</php>">
+                                                        {$vo.title}
+                                                    </a>
+                                                </td>
+                                                <td>{$vo.create_time|time_format}</td>
+                                            </tr>
+                                        </volist>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <notempty name="page">
+                                <ul class="pagination">{$page}</ul>
+                            </notempty>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

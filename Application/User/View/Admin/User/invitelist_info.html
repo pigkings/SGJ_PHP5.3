@@ -1,0 +1,71 @@
+<extend name="$_admin_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.extend.min.css">
+</block>
+
+
+<block name="main">
+    <div class="col-xs-12 col-sm-3">
+        <br/>
+        <a title="新增" class="btn btn-primary" href="javascript:history.back()">返回</a>
+        <br/>
+    </div>
+    <div class="builder-table" style="margin: 15px;">
+        <div class="panel panel-default table-responsive  col-xs-12">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>昵称</th>
+                    <th>用户名</th>
+                    <th>邮箱</th>
+                    <th>手机号</th>
+                    <th>注册时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="list" id="voone">
+                    <tr>
+                        <td>{$voone.id}</td>
+                        <td>{$voone.nickname}</td>
+                        <td>{$voone.username}</td>
+                        <td>{$voone.email}</td>
+                        <td>{$voone.mobile}</td>
+                        <td>{$voone.create_time|date="Y-m-d H:i:s",###}</td>
+                    </tr>
+                    <volist name="voone['item']" id="votwo">
+                        <tr>
+                            <td>{$votwo.id}</td>
+                            <td>{$votwo.nickname}</td>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;|--{$votwo.username}</td>
+                            <td>{$votwo.email}</td>
+                            <td>{$votwo.mobile}</td>
+                            <td>{$votwo.create_time|date="Y-m-d H:i:s",###}</td>
+                        </tr>
+                        <volist name="votwo['item']" id="vothree">
+                            <tr>
+                                <td>{$vothree.id}</td>
+                                <td>{$vothree.nickname}</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--{$vothree.username}</td>
+                                <td>{$vothree.email}</td>
+                                <td>{$vothree.mobile}</td>
+                                <td>{$vothree.create_time|date="Y-m-d H:i:s",###}</td>
+                            </tr>
+                        </volist>
+                    </volist>
+                </volist>
+                <if condition="count($list) eq '0'">
+                    <tr class="builder-data-empty">
+                        <td colspan="7" class="text-center empty-info">
+                            <i class="fa fa-database"></i> 暂时没有数据
+                        </td>
+                    </tr>
+                </if>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</block>

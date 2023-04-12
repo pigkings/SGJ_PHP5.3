@@ -1,0 +1,36 @@
+<extend name="$_user_layout"/>
+<block name="main">
+    <div class="table-responsive" style="background: #fff;padding: 1em;border-radius: .5em;">
+        <table class="table">
+            <caption>推广充值记录</caption>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>用户名称</th>
+                <th>充值金额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <empty name="list">
+                <tr>
+                    <td colspan="4">
+                        没有记录
+                    </td>
+                </tr>
+                <else />
+                <foreach name="list" item="recharge">
+                    <tr>
+                        <td>{$recharge.id}</td>
+                        <td>{:get_user_info($recharge['user_id'],'username')}</td>
+                        <td>
+
+                            {$recharge.money|default="0.00"} 积分
+                        </td>
+                    </tr>
+                </foreach>
+            </empty>
+            </tbody>
+        </table>
+        <ul class="pagination">{$page}</ul>
+    </div>
+</block>

@@ -1,0 +1,62 @@
+<extend name="$_admin_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.extend.min.css">
+</block>
+
+
+<block name="main">
+    <div class="col-xs-12 col-sm-3">
+        <br/>
+        <form class="form" method="get" action="/admin.php?s=/user/user/invitelist.html">
+            <div class="form-group">
+                <div class="input-group search-form">
+                    <input type="text" name="keyword" class="search-input form-control" value="" placeholder="请输入ID/用户名／邮箱／手机号">
+                    <span class="input-group-btn"><a class="btn btn-default search-btn"><i class="fa fa-search"></i></a></span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="" style="margin: 15px;">
+
+
+        <div class="panel panel-default table-responsive builder-table col-xs-12">
+
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>昵称</th>
+                    <th>用户名</th>
+                    <th>邮箱</th>
+                    <th>手机号</th>
+                    <th>注册时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="list" id="vo">
+                    <tr>
+                        <td>{$vo.id}</td>
+                        <td>{$vo.nickname}</td>
+                        <td>{$vo.username}</td>
+                        <td>{$vo.email}</td>
+                        <td>{$vo.mobile}</td>
+                        <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+                        <td><a href="{:U('User/User/invitelistinfo',array('user_id'=>$vo['id']))}">查看下级</a></td>
+                    </tr>
+                </volist>
+                <if condition="count($list) eq '0'">
+                    <tr class="builder-data-empty">
+                        <td colspan="7" class="text-center empty-info">
+                            <i class="fa fa-database"></i> 暂时没有数据
+                        </td>
+                    </tr>
+                </if>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</block>

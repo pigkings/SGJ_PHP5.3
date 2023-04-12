@@ -1,0 +1,189 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.extend.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/libs/jcrop/css/jquery.Jcrop.min.css">
+    <style type="text/css">
+        #preview-pane .preview-container {
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+        }
+        #preview-pane .preview-container img{
+            width: 200px;
+            height: 200px;
+        }
+        #crop-pane .crop {
+            width: 300px;
+        }
+        #preview-pane {
+            display: none;
+        }
+        .jcrop-holder #preview-pane {
+            display: block;
+            position: absolute;
+            z-index: 2000;
+            top: 10px;
+            right: -280px;
+            padding: 0px;
+            border: 1px rgba(0,0,0,.4) solid;
+            background-color: white;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            overflow: hidden;
+            -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</block>
+
+<block name="main">
+    <div class="container">
+        <div class="row ucenter-row">
+            <div class="col-xs-12 col-md-3">
+                <include file="$_user_center_side" /><!-- 包含用户中心侧边导航 -->
+            </div>
+            <div class="col-xs-12 col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>更改头像</h4>
+                        <form method="post" action="{:U('')}" class="avatar-form">
+                            <div class="form-group">
+                                <div id="crop-pane" class="row">
+                                    <div id="upload_list" class="uploader-list col-xs-12 img-box">
+                                        <div id="upload_preview" class="col-md-4 file-item thumbnail">
+                                            <img class="crop" src="{$user_info.avatar|get_cover='avatar'}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="preview-pane" class="hidden-xs">
+                                    <div class="preview-container">
+                                        <img class="preview" src="{$user_info.avatar|get_cover='avatar'}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="avatar[src]" id="upload-avatar-src">
+                                <input type="hidden" name="avatar[w]" id="w">
+                                <input type="hidden" name="avatar[h]" id="h">
+                                <input type="hidden" name="avatar[x]" id="x">
+                                <input type="hidden" name="avatar[y]" id="y">
+                                <input type="hidden" name="avatar[vw]" id="vw">
+                                <input type="hidden" name="avatar[vh]" id="vh">
+                                <a id="upload-avatar-button" class="btn btn-primary">上传头像</a>
+                                <button type="submit" class="submit btn btn-primary ajax-post hidden-xs" target-form="avatar-form">保存头像</button>
+                                <button type="submit" class="submit btn btn-primary btn-block ajax-post visible-xs" target-form="avatar-form">保存头像</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript" src="__CUI__/js/cui.extend.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/libs/jcrop/js/jquery.Jcrop.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            // 更新头像预览
+            function updatePreview(c){
+                if (parseInt(c.w) > 0) {
+                    var rx = xsize / c.w;
+                    var ry = ysize / c.h;
+                    $pimg.css({
+                        width: Math.round(rx * boundx) + 'px',
+                        height: Math.round(ry * boundy) + 'px',
+                        marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                        marginTop: '-' + Math.round(ry * c.y) + 'px'
+                    });
+
+                    $('#w').val(c.w);
+                    $('#h').val(c.h);
+                    $('#x').val(c.x);
+                    $('#y').val(c.y);
+                    $('#vw').val(boundx);
+                    $('#vh').val(boundy);
+                }
+            };
+
+            // Jcrop处理
+            var jcrop_api,
+                boundx,
+                boundy,
+
+                // 预览信息
+                $preview = $('#preview-pane'),
+                $pcnt = $('#preview-pane .preview-container'),
+                $pimg = $('#preview-pane .preview-container img'),
+
+                xsize = $pcnt.width(),
+                ysize = $pcnt.height();
+
+            // 上传头像
+            var uploader = WebUploader.create({
+                auto: true,
+                duplicate: true,
+                swf: '__CUI__/swf/uploader.swf',
+                server: '{:U(MODULE_MARK."/Upload/upload", array("temp" => "true"))}',
+                pick: '#upload-avatar-button',
+                resize: false,
+                fileNumLimit: 20,
+                fileSingleSizeLimit:<php> echo C('UPLOAD_FILE_SIZE') ? : 2; </php>*1024*1024,
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/*'
+                }
+            });
+
+            // 文件上传过程中创建进度条实时显示。
+            uploader.on( 'uploadProgress', function( file, percentage ) {
+                $( '#upload_preview').removeClass('hidden');
+                var $li = $( '#upload_preview'),
+                    $percent = $li.find('.progress .progress-bar');
+                // 避免重复创建
+                if ( !$percent.length ) {
+                    $percent = $('<div class="progress"><div class="progress-bar"></div></div>')
+                            .appendTo( $li )
+                            .find('.progress-bar');
+                }
+                $percent.css( 'width', percentage * 100 + '%' );
+            });
+
+            // 完成上传完了，成功或者失败，先删除进度条。
+            uploader.on( 'uploadComplete', function( file ) {
+                $( '#upload_preview' ).find('.progress').remove();
+            });
+
+            // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+            uploader.on( 'uploadSuccess', function( file , response) {
+                $( '#upload_preview' ).addClass('upload-state-done');
+                if(eval('response').status == 0){
+                    $.alertMessager(response.info);
+                } else {
+                    $( '#upload-avatar-src' ).attr('value', response.path);
+                    $( '#upload_preview img').attr('src', response.url);
+                    $( '#preview-pane .preview' ).attr('src', response.url);
+
+                    // 开启图片裁剪
+                    $('#crop-pane .crop').Jcrop({
+                        onChange : updatePreview,
+                        onSelect : updatePreview,
+                        setSelect:  [xsize,ysize,0,0],
+                        aspectRatio: xsize / ysize
+                    },function(){
+                        var bounds = this.getBounds();
+                        boundx = bounds[0];
+                        boundy = bounds[1];
+                        jcrop_api = this;
+                        $preview.appendTo(jcrop_api.ui.holder);
+                    });
+                }
+            });
+        });
+    </script>
+</block>

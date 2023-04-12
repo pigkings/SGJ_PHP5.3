@@ -1,0 +1,134 @@
+﻿<extend name="$_user_layout"/>
+<block name="main">
+    <section>
+        <div class="span12">
+
+            <form class="login-form" action="{:U('User/Recharge/add')}" method="post">
+                <h3 class="loginf_h3tt">在线充值 <a class=" pull-right" style="color: white;font-size: 12px;padding-top: 8px" href="#" id="showRechargeInfo">查看帐号</a></h3>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputCardNo">积分</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputCardNo" class="span3" placeholder="请输入充值积分"  nullmsg="请填写卡号"  name="money">
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputCardPwd">交易号</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputCardPwd" class="span3" placeholder="请输入转账交易号"  nullmsg="请填写转账交易号" datatype="*6-20" name="water_number">
+                    </div>
+                </div>
+                <div class="control-group clearfix">
+                    <label class="control-label pull-left" for="inputCardPwd">备注</label>
+                    <div class="controls pull-left">
+                        <input type="text" id="inputWaterNumber" class="span3" placeholder="可以为空"  name="user_remark">
+                    </div>
+                </div>
+                <div class="control-group1">
+                    <div class="controls">
+                        <div class="controls Validform_checktip text-warning"></div>
+                        <button type="submit" class="btn btnsubmit">充 值</button>
+
+                    </div>
+                </div>
+            </form>
+
+            <div class="modal fade " id="rechargeInfo">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">充值帐号</h4>
+                        </div>
+                        <div class="modal-body">
+                            <section>
+                                <div class="span12">
+                                    <table class="table table-striped table-bordered">
+                                        <tr>
+                                            <td>支付方式: </td>
+                                            <td>
+                                                  <p>
+                                                      <input type="radio" name="pay-type" id="weixin-pay" onclick="paytypeSelect(1)">
+                                                      <label for="weixin-pay">
+                                                          <img src="__HOME_IMG__/weixinpay_logo.jpg" alt="" height="30px" onclick="paytypeSelect(1)">
+                                                      </label>
+                                                  </p>
+                                                <p>
+                                                    <input type="radio" name="pay-type" id="ali-pay" onclick="paytypeSelect(2)">
+                                                    <label for="ali-pay">
+                                                        <img src="__HOME_IMG__/alipay_logo.jpg" alt="" height="30px" onclick="paytypeSelect(2)">
+                                                    </label>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>支付类型</td>
+                                            <td>在线充值</td>
+                                        </tr>
+                                        <tr>
+                                            <td>使用说明</td>
+                                            <td>
+                                                请长按二维码保存到相册或者截屏后使用对应支付端进行扫码支付，支付完成后一分钟内到账!
+                                            </td>
+                                        </tr>
+                                        <tr id="weixin-account">
+                                            <td></td>
+                                            <td >
+                                                <p>微信帐号：{:C('GUESS_WEIXIN_ACCOUNT')}</p>
+                                                <img width="80%" src="{$weixinImg}" alt="">
+                                            </td>
+                                        </tr>
+                                        <tr id="ali-account">
+                                            <td></td>
+                                            <td >
+                                                <p>支付宝帐号：{:C('GUESS_ALI_ACCOUNT')}</p>
+                                                <img width="80%" src="{$aliImg}" alt="">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!--<form class="login-form" action="{:U('User/Recharge/add')}" method="post">-->
+                                        <!--<h4>-->
+                                            <!--<label class="control-label pull-left" for="inputCardPwd">支付宝帐号{:C('GUESS_ALI_ACCOUNT')}</label>-->
+                                        <!--</h4>-->
+                                            <!--<p>-->
+                                                <!--<img src="{$aliImg}" alt="">-->
+                                            <!--</p>-->
+                                        <!--<hr>-->
+                                        <!--<h4>-->
+                                            <!--<label class="control-label pull-left" for="inputCardPwd">微信帐号：{:C('GUESS_WEIXIN_ACCOUNT')}</label>-->
+                                        <!--</h4>-->
+                                        <!--<p>-->
+                                            <!--<img src="{$weixinImg}" alt="">-->
+                                        <!--</p>-->
+                                    <!--</form>-->
+                                </div>
+                            </section>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">已完成支付提交充值</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </div>
+    </section>
+
+</block>
+<block name="javascript">
+    <script type="text/javascript">
+        $('#rechargeInfo').modal();
+        $('#showRechargeInfo').click(function (event) {
+            event.preventDefault();
+            $('#rechargeInfo').modal();
+        });
+        $('#weixin-pay').click();
+        function paytypeSelect($type) {
+            if ($type==1){
+                $('#weixin-account').show();
+                $('#ali-account').hide();
+            } else{
+                $('#weixin-account').hide();
+                $('#ali-account').show();
+            }
+        }
+    </script>
+</block>

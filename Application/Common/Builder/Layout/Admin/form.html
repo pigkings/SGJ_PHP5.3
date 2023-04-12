@@ -1,0 +1,15 @@
+<extend name="$_admin_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.extend.min.css">
+    <include file="./Application/Common/Builder/style.html" />
+</block>
+
+<block name="main">
+    <include file="$_formbuilder_layout" builderpath="./Application/Common/Builder" />
+</block>
+
+<block name="script">
+    <script type="text/javascript" src="__CUI__/js/cui.extend.min.js"></script>
+    <include file="./Application/Common/Builder/javascript.html" />
+</block>

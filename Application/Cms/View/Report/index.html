@@ -1,0 +1,39 @@
+<extend name="$_home_public_layout"/>
+
+<block name="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <form action="{:U('')}" method="POST" class="form report-form">
+                    <legend>举报</legend>
+                    <div class="form-group hidden">
+                        <label for="">举报项ID</label>
+                        <input type="hidden" class="form-control" name="data_id" placeholder="举报项ID" value="{$info.id}">
+                    </div>
+                    <div class="form-group">
+                        <label for="">举报项</label>
+                        <input type="text" class="form-control" disabled name="title" value="{$info.title}">
+                    </div>
+                    <div class="form-group">
+                        <label for="">举报理由</label>
+                        <select class="form-control custom-select" name="reason">
+                            <option value="">请选择理由</option>
+                            <volist name="reason_list" id="re">
+                                <option value="{$key}">{$re}</option>
+                            </volist>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">举报理由详情</label>
+                        <textarea name="abstract" class="form-control" rows="5" placeholder="请尽可能清除描述您的问题~" maxlength="200"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="">电话</label>
+                        <input type="text" class="form-control" name="mobile" placeholder="请输入您的电话">
+                    </div>
+                    <button type="submit" class="btn btn-primary ajax-post" target-form="report-form">确认提交</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>

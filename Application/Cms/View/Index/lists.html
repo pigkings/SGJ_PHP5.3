@@ -1,0 +1,107 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <style type="text/css">
+        /* 文章列表样式 */
+        .article-list .media {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .article-list .list-cover{
+            width: 180px;
+            height: 100px;
+        }
+        .article-list .list-title{
+            margin-top: 6px;
+        }
+        .article-list .list-abstract{
+            height: 42px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (max-width: 768px) {
+            .article-list .list-title{
+                font-size: 14px;
+                margin: 0px;
+            }
+            .article-list .list-cover{
+                width: 90px;
+                height: 66px;
+            }
+            .article-list .list-info {
+                font-size: 10px;
+                margin-top: 3px !important;
+                margin-bottom: 2px !important;
+            }
+            .article-list .list-abstract{
+                height: 36px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</block>
+
+<block name="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-9">
+                <!-- 文档列表 -->
+                <div class="panel">
+                    <div class="article-list panel-body">
+                        <volist name="volist" id="vo">
+                            <div class="media">
+                                <div class="media-left">
+                                    <a href="{:U('detail', array('id' => $vo['id']))}">
+                                        <img class="list-cover lazy" data-src="{$vo.cover|get_cover='default'}">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="list-title text-overflow margin-top-none">
+                                        <a href="{:U('detail', array('id' => $vo['id']))}">
+                                            {$vo.main_field}
+                                        </a>
+                                    </h4>
+                                    <ul class="list-info list-unstyled list-inline text-muted small">
+                                        <li><i class="fa fa-calendar"></i> {$vo.create_time|time_format='Y-m-d'}</li>
+                                        <li><i class="fa fa-eye"></i> {$vo.view}</li>
+                                        <li><i class="fa fa-comments"></i> {$vo.comment}</li>
+                                        <li><i class="fa fa-thumbs-o-up"></i> {$vo.good}</li>
+                                    </ul>
+                                    <div class="list-abstract text-muted">{$vo.abstract}</div>
+                                </div>
+                            </div>
+                        </volist>
+                        <notempty name="page">
+                            <ul class="pagination">{$page}</ul>
+                        </notempty>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 hidden-xs">
+                <!-- 侧边导航 -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <!-- 搜索 -->
+                        <form role="search" action="{:U('', array('cid' => $_current_category['id']))}">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control search-input" placeholder="搜索" name="keyword" value="{$_GET['keywords']}">
+                                    <a type="submit" class="input-group-addon search-btn"><i class='fa fa-search'></i></a>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- 分类列表 -->
+                        <div class="list-group">
+                            <cms:category_list name="vo" pid="$_current_category['id']">
+                                <a class="list-group-item <if condition='$vo.id eq $_current_category.id'>active</if>" href="{$vo.href}">
+                                    {$vo.title}
+                                </a>
+                            </cms:category_list>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>

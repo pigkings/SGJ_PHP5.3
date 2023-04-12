@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>玩法规则说明</title>
+    <link type="text/css" rel="stylesheet" href="__HOME_CSS__/base.css"  />
+    <link type="text/css" rel="stylesheet" href="__HOME_CSS__/style.css"  />
+</head>
+<body>
+<style>
+    body{
+        background: url(__HOME_IMG__/bodybg.jpg)/*tpa=http://www.fafa8889.com/Public/Home/images/bodybg.jpg*/ no-repeat !important;
+        background-size: cover !important;
+    }
+</style>
+<div class="rm_cont">
+    <div class="rm_tt">
+        <img src="__HOME_IMG__/wf_tt.jpg" />
+    </div>
+    <div class="wanf_box">
+        <h3 class="wf_tt">
+            【{:C('WEB_NAME')}】 {:C('WEB_JINGCAI_TIP')}
+        </h3>
+        <h3 class="wf_tt wf_tt1">
+            开奖时间：全天24小时
+        </h3>
+        <div class="ruls_txtbox">
+            <div class="rtxtb_sp">投注规则</div>
+            {:C('GUESS_GAME_RULE')}
+        </div>
+    </div>
+    <div class="footbtn">
+        <a href="{:U('User/User/toregist')}" >立即注册</a>
+        <a class="reback" href="{:U('Home/Index/index')}" >返回首页</a>
+    </div>
+</div>
+</body>
+</html>

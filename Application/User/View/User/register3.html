@@ -1,0 +1,23 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <link rel="stylesheet" type="text/css" href="__CUI__/css/cui.extend.min.css">
+    <include file="./Application/Common/Builder/style.html" />
+</block>
+
+<block name="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <include file="$_formbuilder_layout" builderpath="./Application/Common/Builder" />
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript" src="__CUI__/js/cui.extend.min.js"></script>
+    <include file="./Application/Common/Builder/javascript.html" />
+</block>
+
+<block name="main"></block>

@@ -1,0 +1,47 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <style type="text/css">
+        /* 新闻资讯 */
+        .news ul li {
+            padding: 5px 0;
+        }
+    </style>
+</block>
+
+<block name="main">
+    <div class="container">
+        <!-- 资讯 -->
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 news">
+                <h3>新闻资讯 <small>／News</small></h3>
+                <ul class="list-unstyled">
+                    <cms:article_list name="vo" cid="$_index_cate['a']" limit="8">
+                        <li>
+                            <a class="text-muted" href="{$vo.href}">
+                                <i class="fa {$vo.icon}"></i>
+                                <span>{$vo.title|cut_str=0,20}</span>
+                                <span class="pull-right visible-lg">{$vo.create_time|time_format}</span>
+                            </a>
+                        </li>
+                    </cms:article_list>
+                </ul>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 news">
+                <h3>通知公告 <small>／Notice</small></h3>
+                <ul class="list-unstyled">
+                    <cms:article_list name="vo" cid="$_index_cate['a']" limit="8">
+                        <li>
+                            <a target="_blank" class="text-muted" href="{$vo.href}">
+                                <i class="fa {$vo.icon}"></i>
+                                <span>{$vo.title|cut_str=0,20}</span>
+                                <span class="pull-right visible-lg">{$vo.create_time|time_format}</span>
+                            </a>
+                        </li>
+                    </cms:article_list>
+                </ul>
+            </div>
+        </div>
+    </div>
+</block>

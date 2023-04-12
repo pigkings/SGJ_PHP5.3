@@ -1,0 +1,234 @@
+<extend name="$_home_public_layout"/>
+
+<block name="style">
+    <style type="text/css">
+        .article-title {
+            margin-bottom: 15px;
+        }
+        .article-info {
+            padding: 10px 0px;
+            margin-bottom: 20px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        .article-info ul {
+            margin-bottom: 0px;
+        }
+        .article-body {
+            margin-bottom: 25px;
+        }
+        .article-download .down-icon img {
+            width: 20px;
+        }
+        .article-download .down-name {
+            font-size: 16px;
+            vertical-align: middle;
+        }
+        .article-download .badge {
+            margin-top: 2px;
+        }
+        .article-download .list-group-item {
+            border-style: dashed;
+        }
+    </style>
+</block>
+
+<block name="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-9">
+                <!-- 文章内容 -->
+                <div class="panel">
+                    <article class="article panel-body animated fadeInLeft">
+                        <!-- 文章标题 -->
+                        <div class="article-title">
+                            <h3 class="text-muted-5">{$info.main_field}</h3>
+                        </div>
+                        <!-- 文章信息 -->
+                        <div class="article-info text-muted">
+                            <ul class="list-unstyled list-inline">
+                                <li><i class="fa fa-calendar"></i> {$info.create_time|time_format}</li>
+                                <li><i class="fa fa-eye"></i> {$info.view} 浏览</li>
+                                <li><i class="fa fa-comments"></i> {$info.comment} 评论</li>
+                                <li><i class="fa fa-thumbs-o-up"></i> {$info.good} 赞</li>
+                                <li class="hidden-xs pull-right">{:hook('BaiduShare')}</li>
+                            </ul>
+                        </div>
+                        <!-- 文章摘要 -->
+                        <notempty name="info.abstract">
+                            <div class="article-abstract">
+                                <blockquote class="abstract">
+                                    <small>{$info.abstract}</small>
+                                </blockquote>
+                            </div>
+                        </notempty>
+                        <!-- 文章正文 -->
+                        <div class="article-body">
+                            {$info.content|parse_content}
+                        </div>
+                        <!-- 文件下载-->
+                        <notempty name="info.file_list">
+                            <div class="article-download">
+                                <ul class="list-group">
+                                    <volist name="info.file_list" id="file">
+                                        <a rel="noflow" class="list-group-item" href="{:U('Home/Upload/download', array('token' => $file['token']))}" title="点击下载">
+                                            <span class="badge">下载次数：{$file.download}</span>
+                                            <span class="down-icon">{$file.show}</span>
+                                            <span class="down-name text-muted">{$file.name}</span>
+                                        </a>
+                                    </volist>
+                                </ul>
+                            </div>
+                        </notempty>
+                        <div class="action text-center">
+                            <!-- 收藏 -->
+                            <?php if ($info['mark_status']) :?>
+                                <button class="btn btn-danger btn-pill ajax-mark" url="{:U('Cms/Mark/add', array('data_id' => $info['id']))}">
+                                    <i class="fa fa-check"></i> 已收藏 <span class="badge">{$info.mark_count}</span>
+                                </button>
+                            <?php else :?>
+                                <button class="btn btn-danger-outline btn-pill ajax-mark" url="{:U('Cms/Mark/add', array('data_id' => $info['id']))}">
+                                    <i class="fa fa-heart"></i> 收藏 <span class="badge">{$info.mark_count}</span>
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                        <!-- 文章导航 -->
+                        <div class="article-pager">
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="previous">上一篇：<a href="{$info.previous.href}">{$info.previous.title}</a></li>
+                                <li class="next">下一篇：<a href="{$info.next.href}">{$info.next.title}</a></li>
+                            </ul>
+                            <hr>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 评论 -->
+                <div class="panel">
+                    <div class="panel-body comment-list-box">
+                        <h3>{$info.comment} 条评论</h3>
+                        <ul class="media-list media-list-stream">
+                            <cms:comment_list name="vo" data_id="$info['id']">
+                                <li class="media p-a">
+                                    <a class="media-left" href="{:U('User/Index/home', array('id' => $vo['uid']))}">
+                                        <img class="media-object img-circle" src="{$vo.avatar}">
+                                    </a>
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            <small class="pull-right">{$vo.create_time} #{$i}</small>
+                                            <h5 class="m-b-0">
+                                                <span>{$vo.nickname}</span>
+                                                <notempty name="vo.pid">
+                                                    <span class="reply">
+                                                        <span class="text-muted small"> 回复 </span>
+                                                        <span>{$vo.parent_comment_nickname}</span>
+                                                    </span>
+                                                </notempty>
+                                            </h5>
+                                        </div>
+                                        <p>
+                                            {$vo.content}
+                                            <a href="javascript:void(0);" class="reply-action" comment_id="{$vo.id}" username="{$vo.nickname}">回复</a>
+                                        </p>
+                                    </div>
+                                </li>
+                            </cms:comment_list>
+                        </ul>
+                        <php>if(C('cms_config.toggle_comment')):</php>
+                            <div class="comment-form-box">
+                                <notempty name="_user_auth">
+                                    <form action="{:U('Cms/Comment/add')}" method="post" class="form comment-form">
+                                        <div class="form-group">
+                                            <textarea name="content" class="form-control new-comment-text" rows="3" placeholder="评论是一种态度..."></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" name="pid" value="0">
+                                            <input type="hidden" name="data_id" value="{$info.id}">
+                                            <a id="submit" type="submit" class="btn btn-primary ajax-post pull-right hidden-xs" target-form="comment-form"><i class="fa fa-comment-o"></i> 发表评论</a>
+                                            <a id="submit" type="submit" class="btn btn-primary btn-block ajax-post margin-top visible-xs" target-form="comment-form"><i class="fa fa-comment-o"></i> 发表评论</a>
+                                        </div>
+                                    </form>
+                                <else />
+                                    <div>
+                                        <a class="btn btn-success" href="{:U('User/User/register')}">注 册</a>
+                                        <a class="btn btn-primary" href="{:U('User/User/login')}">登 录</a>
+                                    </div>
+                                </notempty>
+                                <script type="text/javascript">
+                                    $(function(){
+                                        $(document).delegate('.reply-action', 'click', function() {
+                                            $('input[name=pid]').val($(this).attr('comment_id'));
+                                            $('.new-comment-text').focus().attr('placeholder', '回复'+$(this).attr('username'));
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        <php>endif;</php>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 hidden-xs">
+                <!-- 侧边导航 -->
+                <div class="panel">
+                    <div class="panel-body">
+                        <!-- 搜索 -->
+                        <form role="search" action="{:U('lists', array('cid' => $_current_category['id']))}">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control search-input" placeholder="搜索" name="keyword" value="{$_GET['keywords']}">
+                                    <a type="submit" class="input-group-addon search-btn"><i class='fa fa-search'></i></a>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- 分类列表 -->
+                        <div class="list-group">
+                            <cms:category_list name="vo" pid="$_current_category['id']">
+                                <a class="list-group-item <if condition='$vo.id eq $_current_category.id'>active</if>" href="{$vo.href}">
+                                    {$vo.title}
+                                </a>
+                            </cms:category_list>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        $(function(){
+            // 收藏
+            $(document).delegate('.ajax-mark', 'click', function() {
+                var target;
+                var that = this;
+                if (target = $(this).attr('url')) {
+                    $.get(target).success(function(data){
+                        if (data.status == 1) {
+                            if(data.follow_status == 1){
+                                $(that).removeClass('btn-danger-outline');
+                                $(that).addClass('btn-danger');
+                                $(that).html('<i class="fa fa-check"></i> 已收藏');
+                                $.alertMessager(data.info, 'success');
+                            }else{
+                                $(that).addClass('btn-danger-outline');
+                                $(that).removeClass('btn-danger');
+                                $(that).html('<i class="fa fa-heart"></i> 收藏');
+                                $.alertMessager(data.info, 'success');
+                            }
+                        } else {
+                            if(data.login == 1){
+                                $('#login-modal').modal(); //弹出登陆框
+                            }else{
+                                $.alertMessager(data.info, 'danger');
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+    </script>
+</block>

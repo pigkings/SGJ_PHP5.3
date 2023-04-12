@@ -1,0 +1,170 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol,ul,li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+	font-family:"微软雅黑";
+}
+
+ol, ul {
+	list-style: none;
+}
+/*common*/
+.margin100{ margin-bottom:6em;}
+.clearb{ clear:both;}
+.fl{ float:left;}
+#container { margin: auto 0; overflow:hidden; width: 100%;}
+.f12black{ color:#000; font-size:0.75em; line-height:1em;  margin-bottom:8em; text-align:center; }
+.f12black a{ color:#000; text-decoration:none;}
+.f12bgrey{ color:#000; font-size:0.75em; line-height:1em; margin:1em; text-align:center; }
+.f24white{ font-size:24px; background:#db5b4c; height:2em;/*40px/16px*/ line-height:2em;/*40px/16px*/  font-weight:bold; color:#ffffff; text-align:center;}
+.f14white{ font-size:.875em; background:#db5b4c; height:2em;/*40px/16px*/ line-height:2em;/*40px/16px*/  font-weight:bold; color:#ffffff; text-align:center;}
+.f16bgrey{ font-size:1em; background:#e5e5e5; height:2em;/*40px/16px*/ line-height:2em;/*40px/16px*/  font-weight:bold; color:#000000; text-align:center;}
+.widthauto{ width:100%;position:relative;}
+.tishi{ color:#db5b4c; font-size:.75em;/*12px/16px*/ height:1.875em;/*30px /16px*/ line-height:1.875em; text-align:center;}
+h1{ font-size:22px;  font-weight:bold;}
+body{ background:#f6d971 !important;color:#000;}
+
+.f14blue{background: #c42828 !important;color: #FFD014 !important;}
+
+/*logo*/
+.logo{ background:#eeeeee;  height:5.31em;    /*85px/16px*/}
+.logo img{ display:block;margin:0px auto;}
+/*search box*/
+.search_box{
+	         zoom: 1;
+	         height:3.125em;  /*50px/16px*/
+			 background:#eeeeee;
+			 padding:0.4em;
+             border-top:1px #e5e5e5 solid;
+			 border-bottom:1px #e5e5e5 solid;
+			 }
+.search_box li{
+	         float:left;
+			 height:2.19em; /*35px/16px*/
+			 margin:0.46em 5px;
+			 display:inline;		 
+	         }
+.search{ width:70%; 
+         background:#ffffff url(../images/fangdajing.jpg) 0.1em 0.5em no-repeat;	 
+		 		
+         border:1px #e5e5e5 solid; 
+	     -moz-border-radius: 100px; /* Firefox */
+         -webkit-border-radius:100px; /* Safari 和 Chrome */
+         border-radius: 100px; /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器*/
+		  background-clip: padding-box; /* Android 4.2.x 系统自带浏览器BUG修复*/
+       }
+@media all and (max-width:510px){
+	.search{width:68%;} 
+	.sousuo{ width:25%;}
+	.footer li{ width:10%; }
+}
+@media all and (max-width:372px){
+	.search{width:65%;} 
+	.sousuo{ width:25%;}
+	
+}
+.sousuo{ width:25%;
+         background-color:#db5b4c;
+		 text-align:center;
+        
+         border:1px #e5e5e5 solid; 
+	     -moz-border-radius: 100px; /* Firefox */
+         -webkit-border-radius:100px; /* Safari 和 Chrome */
+         border-top-left-radius: 100px; /* 左上角 */
+       border-top-right-radius: 100px; /* 右上角 */
+       border-bottom-right-radius: 100px; /* 右下角 */
+       border-bottom-left-radius: 100px; /* 左下角 */ /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器*/
+		 background-clip: padding-box; /* Android 4.2.x 系统自带浏览器BUG修复*/
+       }
+.sousuo a{ display:block;}
+/*all kind of A*/
+.sousuo a{ color:#ffffff; text-decoration:none; font-size:1em; line-height:2.19em; /*35px/16px*/}
+/*input*/
+.input_box{border:none;_border:0px;
+font-size:1em; /*16px /16px*/ padding:0.40em 2em; padding-left:0.1em; margin-left:2em; width:80%; }
+@media all and (max-width:980px){
+	.input_box{ float:left; width:78%;}
+	
+}
+@media all and (max-width:700px){
+	.input_box{ float:left; width:70%;}
+	
+}
+@media all and (max-width:530px){
+	.input_box{ float:left; width:63%;}
+	
+}
+@media all and (max-width:440px){
+	.input_box{ float:left; width:55%;}
+	
+}
+@media all and (max-width:358px){
+	.input_box{ float:left; width:48%;}
+	
+}
+.input_common_box{ float:left; width:85%; background:#ffffff;border:1px solid #b9b9b9;color: #999;  height:0.875em;/*14px/16px*/   font-size:0.875em;/*14px/16px*/  padding:0.8125em 0.375em;/*6px/16px*/ }
+@media all and (max-width:650px){
+	.input_common_box{ float:left; width:80%;}
+	
+}
+@media all and (max-width:579px){
+	.input_common_box{ float:left; width:80%;}
+	
+}
+@media all and (max-width:480px){
+	.input_common_box{ float:left; width:79%;}
+	.input1 li label{ float:left; width:3.125em;/*50px/16px*/}
+}
+@media all and (max-width:440px){
+	.input_common_box{ float:left; width:73%;}
+	.input1 li label{ float:left; width:3.125em;/*50px/16px*/}
+}
+@media all and (max-width:379px){
+	.input_common_box{ float:left; width:68%;}
+	.input1 li label{ float:left; width:3.125em;/*50px/16px*/}
+}
+/*验证码*/
+.yanzheng a{ font-size:1em; color:#000000; margin-left:.2em; text-decoration:none;  line-height:2.2em; height:1em;}
+@media all and (max-width:379px){
+	.yanzheng a{}
+}
+/*footer*/
+.footer{ position: fixed; bottom:0px;  width:100%; height:3.4em;/*55px / 16px*/ border-top:1px #e3dfdf solid;border-buttom:1px #e3dfdf solid;padding:0px; background:#eee;}
+.footer li{ float:left; position:relative; display:inline; width:100% !important; }
+.footer li a{display:block;height: text-decoration:none;}
+
+.footer li img{ margin:0 auto; display:block;}
+.gonggao{
+	border: 1px solid #B8EBFA;
+	background-color: #B8EBFA;
+	border-radius: 4px;
+}
+.gonggao .info-img{
+	padding: 5px;
+	float: left;
+	width: 30px;
+}
+.gonggao .info-img img{
+	width: 20px;
+	border-radius: 4px;
+}
+.gonggao .info-content{
+	white-space: nowrap;
+	width: 80%;
+	overflow: hidden;
+	float: left;
+	padding-top: 5px;
+	color: red;
+}
